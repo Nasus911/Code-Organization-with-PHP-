@@ -18,10 +18,10 @@
       <h1 id="register-title">Create your account.</h1>
       <p class="auth-intro">Save your favorite projects and stay close to new work.</p>
       <form action="#" method="post">
-        <div class="form-field"><label for="register-name">Full name</label><input type="text" id="register-name" name="full_name" autocomplete="name" required></div>
-        <div class="form-field"><label for="register-email">Email address</label><input type="email" id="register-email" name="email" autocomplete="email" required></div>
+        <div class="form-field"><label for="register-name">Full name</label><input type="text" id="register-name" name="full_name" autocomplete="name" maxlength="100" pattern=".*\S.*" title="Enter a name with at least one non-space character." required></div>
+        <div class="form-field"><label for="register-email">Email address</label><input type="email" id="register-email" name="email" autocomplete="email" maxlength="254" autocapitalize="none" required></div>
         <div class="form-field"><label for="register-password">Password</label><input type="password" id="register-password" name="password" minlength="8" autocomplete="new-password" required><small>Use at least 8 characters.</small></div>
-        <div class="form-field"><label for="confirm-password">Confirm password</label><input type="password" id="confirm-password" name="confirm_password" minlength="8" autocomplete="new-password" required></div>
+        <div class="form-field"><label for="confirm-password">Confirm password</label><input type="password" id="confirm-password" name="confirm_password" minlength="8" autocomplete="new-password" aria-describedby="confirm-password-feedback" required><small id="confirm-password-feedback" aria-live="polite"></small></div>
         <div class="form-check custom-check"><input class="form-check-input" type="checkbox" id="terms" name="terms" required><label class="form-check-label" for="terms">I agree to the <a href="#">terms and conditions</a>.</label></div>
         <button class="btn btn-primary-custom w-100 auth-submit" type="submit">Create account <span aria-hidden="true">&#8594;</span></button>
       </form>
@@ -29,5 +29,29 @@
     </section>
   </main>
   <footer class="auth-footer"><p>&copy; 2026 Marco Rafaeles</p></footer>
+  <script>
+    const password = document.getElementById("register-password");
+    const confirmPassword = document.getElementById("confirm-password");
+    const passwordFeedback = document.getElementById("confirm-password-feedback");
+
+    function validatePasswordMatch() {
+      if (confirmPassword.value === "") {
+        confirmPassword.setCustomValidity("");
+        confirmPassword.removeAttribute("aria-invalid");
+        passwordFeedback.textContent = "";
+        return;
+      }
+
+      const passwordsMismatch = confirmPassword.value !== password.value;
+      confirmPassword.setCustomValidity(passwordsMismatch ? "Passwords do not match." : "");
+      confirmPassword.setAttribute("aria-invalid", String(passwordsMismatch));
+      passwordFeedback.textContent = passwordsMismatch ? "Passwords do not match." : "";
+    }
+
+    password.addEventListener("input", validatePasswordMatch);
+    confirmPassword.addEventListener("input", validatePasswordMatch);
+    password.addEventListener("change", validatePasswordMatch);
+    confirmPassword.addEventListener("change", validatePasswordMatch);
+  </script>
 </body>
 </html>
